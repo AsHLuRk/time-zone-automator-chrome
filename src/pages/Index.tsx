@@ -1,12 +1,13 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Clock, Globe, Plus, Trash2, Sparkles, Timer } from 'lucide-react';
+import { Clock, Globe, Plus, Trash2, Sparkles, Timer, Moon, Sun } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTheme } from '@/contexts/ThemeContext';
+import AutofillManager from '@/components/AutofillManager';
 
 interface ScheduledSite {
   id: string;
@@ -17,6 +18,7 @@ interface ScheduledSite {
 }
 
 const Index = () => {
+  const { isDark, toggleTheme } = useTheme();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [scheduledSites, setScheduledSites] = useState<ScheduledSite[]>([]);
   const [newSite, setNewSite] = useState({ url: '', time: '', siteName: '' });
@@ -92,7 +94,23 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-100 p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-100 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 p-4 relative overflow-hidden">
+      {/* Theme Toggle Button */}
+      <div className="fixed top-4 right-4 z-20">
+        <Button
+          onClick={toggleTheme}
+          variant="outline"
+          size="icon"
+          className="w-12 h-12 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-2 border-purple-200 dark:border-purple-700 hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+        >
+          {isDark ? (
+            <Sun className="w-6 h-6 text-yellow-500" />
+          ) : (
+            <Moon className="w-6 h-6 text-purple-600" />
+          )}
+        </Button>
+      </div>
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-300/20 to-pink-300/20 rounded-full blur-3xl animate-pulse"></div>
@@ -145,7 +163,7 @@ const Index = () => {
         </div>
 
         {/* Add New Schedule Card */}
-        <Card className="mb-8 shadow-2xl border-0 bg-white/70 backdrop-blur-xl overflow-hidden group hover:shadow-3xl transition-all duration-300 hover:bg-white/80">
+        <Card className="mb-8 shadow-2xl border-0 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl overflow-hidden group hover:shadow-3xl transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <CardHeader className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white rounded-t-lg relative overflow-hidden">
             <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
@@ -208,6 +226,11 @@ const Index = () => {
           </CardContent>
         </Card>
 
+        {/* Autofill Manager */}
+        <div className="mb-8">
+          <AutofillManager />
+        </div>
+
         {/* Scheduled Sites List */}
         <div className="space-y-6">
           <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
@@ -223,7 +246,7 @@ const Index = () => {
           </h2>
           
           {scheduledSites.length === 0 ? (
-            <Card className="shadow-2xl border-0 bg-white/60 backdrop-blur-xl">
+            <Card className="shadow-2xl border-0 bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl">
               <CardContent className="p-16 text-center">
                 <div className="relative mb-6">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-300 to-indigo-300 rounded-full blur-2xl opacity-30"></div>
@@ -245,7 +268,7 @@ const Index = () => {
               {scheduledSites.map((site, index) => (
                 <Card 
                   key={site.id} 
-                  className="shadow-xl border-0 bg-white/70 backdrop-blur-xl hover:shadow-2xl transition-all duration-300 hover:bg-white/80 group overflow-hidden animate-fade-in"
+                  className="shadow-xl border-0 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl hover:shadow-2xl transition-all duration-300 hover:bg-white/80 group overflow-hidden animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -306,7 +329,7 @@ const Index = () => {
         </div>
 
         {/* Info Card */}
-        <Card className="mt-8 shadow-xl border-0 bg-gradient-to-r from-amber-50/80 to-orange-50/80 backdrop-blur-xl overflow-hidden">
+        <Card className="mt-8 shadow-xl border-0 bg-gradient-to-r from-amber-50/80 to-orange-50/80 dark:bg-gray-800/80 backdrop-blur-xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-100/20 to-orange-100/20"></div>
           <CardContent className="p-8 relative">
             <div className="flex items-start gap-4">
